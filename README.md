@@ -5,6 +5,7 @@ This project is an automated Python system that crawls the top 10 trending AI to
 
 **Key Features:**
 - Crawls trending AI topics and categorizes them (e.g., AI prompts, AI agents, AI MCP servers, AI models, AI resources)
+- **Only includes X posts (tweets) as sources if they have more than 500 likes or more than 20 retweets**
 - Summarizes and formats results in both JSON and Markdown
 - Saves daily newsletters in `AI-newsletter/` with date-based filenames
 - Publishes newsletters to your GitHub repository (requires credentials)
@@ -47,23 +48,23 @@ A sample newsletter file (`AI-newsletter/2025-05-13-ai-newsletter.md`):
 
 ## AI prompts
 1. **Prompt engineering breakthrough**
-   - [https://x.com/i/web/status/1234567890](https://x.com/i/web/status/1234567890)
+   - [https://x.com/i/web/status/1234567890](https://x.com/i/web/status/1234567890) (Likes: 1200, Retweets: 45)
 
 ## AI agents
 1. **New AI agent released**
-   - [https://x.com/i/web/status/1234567891](https://x.com/i/web/status/1234567891)
+   - [https://x.com/i/web/status/1234567891](https://x.com/i/web/status/1234567891) (Likes: 800, Retweets: 30)
 
 ## AI MCP servers
 1. **MCP server open source**
-   - [https://x.com/i/web/status/1234567892](https://x.com/i/web/status/1234567892)
+   - [https://x.com/i/web/status/1234567892](https://x.com/i/web/status/1234567892) (Likes: 600, Retweets: 22)
 
 ## AI models
 1. **GPT-4 model tips**
-   - [https://x.com/i/web/status/1234567893](https://x.com/i/web/status/1234567893)
+   - [https://x.com/i/web/status/1234567893](https://x.com/i/web/status/1234567893) (Likes: 900, Retweets: 25)
 
 ## AI resources
 1. **Top AI learning resources**
-   - [https://x.com/i/web/status/1234567894](https://x.com/i/web/status/1234567894)
+   - [https://x.com/i/web/status/1234567894](https://x.com/i/web/status/1234567894) (Likes: 700, Retweets: 21)
 ```
 
 ---
@@ -74,7 +75,7 @@ A sample newsletter file (`AI-newsletter/2025-05-13-ai-newsletter.md`):
 - A: Set the `AI_CATEGORIES` environment variable (comma-separated) in your `.env` or GitHub secrets.
 
 **Q: How do I avoid irrelevant tweets?**
-- A: The pipeline uses keyword filtering and can be extended with spaCy or OpenAI LLM for better relevance.
+- A: The pipeline uses keyword filtering and can be extended with spaCy or OpenAI LLM for better relevance. **Only tweets with >500 likes or >20 retweets are included as sources.**
 
 **Q: How do I get notified of workflow results?**
 - A: Set up email secrets (`EMAIL_TO`, `EMAIL_USERNAME`, `EMAIL_PASSWORD`) in your repo. The workflow will send you a notification on completion.

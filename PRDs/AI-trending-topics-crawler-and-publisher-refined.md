@@ -7,11 +7,12 @@
 ### Objective
 
 Build a fully automated agent that:
-1. Crawls the top 10 trending topics about AI from X.com (Twitter) daily, categorized into distinct areas such as AI Prompts, AI Agents/MCP Servers, AI Learnings, and AI Resources.
-2. Summarizes each topic with a concise, human-readable title and links to all relevant sources.
-3. Outputs the results in both structured JSON and Markdown formats, organized by category.
-4. Saves the summarized content in a new folder called `AI-newsletter`, with each day's data saved as a new file named `<date>-ai-newsletter.md` (e.g., `2025-05-13-ai-newsletter.md`).
-5. Commits and pushes the changes to the repository automatically.
+1. Crawls the top 10 trending topics about AI from X.com (Twitter) daily, categorized into distinct areas such as AI Prompts, AI Agents/MCP Servers, AI Models, and AI Resources.
+2. **Only includes posts (tweets) as sources if they have more than 500 likes or more than 20 retweets.**
+3. Summarizes each topic with a concise, human-readable title and links to all relevant sources.
+4. Outputs the results in both structured JSON and Markdown formats, organized by category.
+5. Saves the summarized content in a new folder called `AI-newsletter`, with each day's data saved as a new file named `<date>-ai-newsletter.md` (e.g., `2025-05-13-ai-newsletter.md`).
+6. Commits and pushes the changes to the repository automatically.
 
 ---
 
@@ -25,7 +26,8 @@ The rapid pace and volume of AI-related discussions on X.com make it difficult t
 
 - **In Scope:**
   - Crawling trending AI topics from X.com (Twitter) using public or authenticated APIs.
-  - Categorizing topics into areas such as AI Prompts, AI Agents/MCP Servers, AI Learnings, and AI Resources (categories can be extended/configured).
+  - **Filtering to only include posts with >500 likes or >20 retweets.**
+  - Categorizing topics into areas such as AI Prompts, AI Agents/MCP Servers, AI Models, and AI Resources (categories can be extended/configured).
   - Summarizing topics with titles and source links.
   - Formatting output as JSON and Markdown, organized by category.
   - Saving output in the `AI-newsletter` folder, with each day's data in a new file named `<date>-ai-newsletter.md`.
@@ -43,18 +45,21 @@ The rapid pace and volume of AI-related discussions on X.com make it difficult t
 #### 1. Data Collection
 
 - **Source:** X.com (Twitter) trending topics.
-- **Criteria:** Topics must be related to "AI" (Artificial Intelligence) and further classified into categories such as:
-  - AI Prompts
-  - AI Agents / MCP Servers
-  - AI Learnings
-  - AI Resources
-  (Categories should be configurable and extensible.)
+- **Criteria:**
+  - Topics must be related to "AI" (Artificial Intelligence) and further classified into categories such as:
+    - AI Prompts
+    - AI Agents / MCP Servers
+    - AI Models
+    - AI Resources
+    (Categories should be configurable and extensible.)
+  - **Only include posts (tweets) as sources if they have more than 500 likes or more than 20 retweets.**
 - **Quantity:** Top 10 trending topics per category.
 - **Data Points:**
   - Topic title (brief, human-readable)
   - List of relevant source links (tweets, articles, etc.)
   - Category label
   - Timestamp of data collection
+  - **Engagement metrics (likes, retweets) for each post**
 
 #### 2. Categorization & Summarization
 
@@ -78,8 +83,11 @@ The rapid pace and volume of AI-related discussions on X.com make it difficult t
           {
             "title": "Brief summary of the topic",
             "sources": [
-              "https://link1.com",
-              "https://link2.com"
+              {
+                "url": "https://link1.com",
+                "like_count": 1234,
+                "retweet_count": 56
+              }
             ],
             "timestamp": "2024-06-10T12:00:00Z"
           },
@@ -97,24 +105,10 @@ The rapid pace and volume of AI-related discussions on X.com make it difficult t
 
     ## AI Prompts
     1. **[Topic Title 1]**
-       - [Source 1](https://link1.com)
-       - [Source 2](https://link2.com)
-    2. **[Topic Title 2]**
-       - [Source 1](https://link1.com)
-    ...
-
-    ## AI Agents / MCP Servers
-    1. **[Topic Title 1]**
-       - [Source 1](https://link1.com)
-    ...
-
-    ## AI Learnings
-    ...
-
-    ## AI Resources
+       - [Source 1](https://link1.com) (Likes: 1234, Retweets: 56)
     ...
     ```
-  - Each category should be a clear section, with up to 10 topics per category, each with its sources.
+  - Each category should be a clear section, with up to 10 topics per category, each with its sources and engagement metrics.
 
 #### 4. GitHub Integration
 
@@ -196,7 +190,7 @@ The system will be implemented as a modular AI agent with the following componen
    - Collects relevant source links (tweets, articles).
 
 2. **Categorizer Agent**
-   - Classifies each topic into a category (e.g., AI Prompts, AI Agents/MCP Servers, AI Learnings, AI Resources) using keyword filtering, NLP, or classification models.
+   - Classifies each topic into a category (e.g., AI Prompts, AI Agents/MCP Servers, AI Models, AI Resources) using keyword filtering, NLP, or classification models.
    - Categories are configurable and extensible.
 
 3. **Summarizer Agent**
