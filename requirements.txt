@@ -1,0 +1,5 @@
+requests
+PyGithub
+python-dotenv
+pytest
+markdown 
