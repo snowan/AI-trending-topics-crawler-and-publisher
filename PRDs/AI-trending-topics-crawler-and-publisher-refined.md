@@ -266,3 +266,102 @@ ai-trending-topics-crawler/
 ---
 
 **End of Refined PRD & Implementation Plan** 
+
+---
+
+## 1. **Step-by-Step Guide: Setting Up X.com API Credentials**
+
+### a. **Create a Developer Account**
+- Go to [developer.x.com](https://developer.x.com/) and sign in with your Twitter account.
+- Apply for a developer account if you don't have one.
+
+### b. **Create a Project and App**
+- In the developer portal, create a new project and an associated app.
+- Under your app's "Keys and tokens" section, generate a **Bearer Token** (for OAuth 2.0 Bearer Token authentication).
+
+### c. **Store Your Bearer Token Securely**
+- In your project root, create a file named `.env` (already in your `.gitignore`).
+- Add your token:
+  ```
+  X_BEARER_TOKEN=your_bearer_token_here
+  ```
+
+---
+
+## 2. **Update Your Code: Real X.com API Integration**
+
+### a. **Install/Check Dependencies**
+- You already have `requests` and `python-dotenv` in your `requirements.txt`.
+
+### b. **Update `crawler.py`**
+
+Replace the mock implementation with a real API call. Here's a robust version:
+
+```python
+import os
+import requests
+from dotenv import load_dotenv
+
+class TrendingTopicsCrawler:
+    """Fetches trending topics from X.com (Twitter) API."""
+    def __init__(self):
+        load_dotenv()
+        self.bearer_token = os.getenv("X_BEARER_TOKEN")
+        self.base_url = "https://api.twitter.com/2/tweets/search/recent"
+        self.headers = {"Authorization": f"Bearer {self.bearer_token}"}
+
+    def fetch_trending_topics(self, query="AI OR artificial intelligence OR #AI", max_results=50):
+        params = {
+            "query": query,
+            "max_results": max_results,
+            "tweet.fields": "created_at,author_id",
+        }
+        response = requests.get(self.base_url, headers=self.headers, params=params)
+        if response.status_code != 200:
+            raise Exception(f"Twitter API error: {response.status_code} {response.text}")
+        data = response.json()
+        topics = []
+        for tweet in data.get("data", []):
+            topics.append({
+                "text": tweet["text"],
+                "link": f"https://x.com/i/web/status/{tweet['id']}"
+            })
+        return topics
+```
+
+**Notes:**
+- This uses the "recent search" endpoint, which is available on the Essential and Elevated access levels.
+- You can adjust the `query` to focus on AI topics and hashtags.
+- You may need to handle pagination for more results.
+
+### c. **Update Your Unit Test**
+- Mock the `requests.get` call in your test to avoid hitting the real API.
+
+---
+
+## 3. **Error Handling & Rate Limiting**
+- If you hit rate limits, the API will return a 429 status. Implement retry logic or exponential backoff as needed.
+- Always check for `response.status_code` and handle errors gracefully.
+
+---
+
+## 4. **Run the Workflow**
+- Make sure your `.env` file is present and contains your Bearer Token.
+- Run `python main.py` to fetch real trending topics and generate your newsletter.
+
+---
+
+## 5. **Sample `.env` File**
+```
+X_BEARER_TOKEN=YOUR_TWITTER_BEARER_TOKEN
+```
+
+---
+
+## 6. **Next Steps**
+- Once this is working, you can further refine your categorization, summarization, and publishing steps.
+- You can also add more advanced error handling, logging, and notification features.
+
+---
+
+Would you like me to update your `crawler.py` with the real API integration code now? If so, please confirm you have your Bearer Token ready in your `.env` file! 
