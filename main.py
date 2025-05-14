@@ -8,7 +8,7 @@ import os
 from datetime import datetime
 import logging
 
-CATEGORIES = os.getenv('AI_CATEGORIES', 'AI Prompts,AI Agents,AI MCP Servers,AI Learnings,AI Resources').split(',')
+CATEGORIES = os.getenv('AI_CATEGORIES', 'AI prompts,AI agents,AI MCP servers,AI models,AI resources').split(',')
 OUTPUT_DIR = os.getenv('NEWSLETTER_OUTPUT_DIR', 'AI-newsletter')
 logging.basicConfig(level=logging.INFO)
 

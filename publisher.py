@@ -7,9 +7,9 @@ class NewsletterPublisher:
     """Publishes the newsletter markdown file to GitHub."""
     def __init__(self):
         load_dotenv()
-        self.token = os.getenv("GITHUB_TOKEN")
-        self.repo_name = os.getenv("GITHUB_REPO")
-        self.branch = os.getenv("GITHUB_BRANCH", "main")
+        self.token = os.getenv("GH_TOKEN")
+        self.repo_name = os.getenv("GH_REPO", "snowan/AI-trending-topics-crawler-and-publisher")
+        self.branch = os.getenv("GH_BRANCH", "main")
         logging.basicConfig(level=logging.INFO)
 
     def publish(self, file_path, commit_message):

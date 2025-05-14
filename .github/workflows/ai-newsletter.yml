@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
       GITHUB_REPO: ${{ secrets.GITHUB_REPO }}
       GITHUB_BRANCH: ${{ secrets.GITHUB_BRANCH }}
       AI_CATEGORIES: ${{ secrets.AI_CATEGORIES }}
