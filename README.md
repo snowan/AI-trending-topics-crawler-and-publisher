@@ -20,17 +20,73 @@ This project is an automated Python system that crawls the top 10 trending AI to
 ```mermaid
 graph TD
     A[Crawler] --> B[AI Relevance Filter]
-    B --> C[Categorizer]
+    B --> B2{Optional: LLM/ML Filter}
+    B2 --> C[Categorizer]
+    B --> C
     C --> D[Summarizer]
     D --> E[Formatter]
     E --> F[Publisher]
     F --> G[GitHub Repo]
     F --> H[Email Notification]
+    F --> X[Error Handling/Logging]
     subgraph Automation
         I[GitHub Actions Scheduler]
     end
     I --> A
+    X -.-> H
 ```
+
+---
+
+## Sample Output
+
+A sample newsletter file (`AI-newsletter/2025-05-13-ai-newsletter.md`):
+
+```markdown
+# AI Newsletter — Top 10 Trending AI Topics per Category on X.com (2025-05-13)
+
+## AI prompts
+1. **Prompt engineering breakthrough**
+   - [https://x.com/i/web/status/1234567890](https://x.com/i/web/status/1234567890)
+
+## AI agents
+1. **New AI agent released**
+   - [https://x.com/i/web/status/1234567891](https://x.com/i/web/status/1234567891)
+
+## AI MCP servers
+1. **MCP server open source**
+   - [https://x.com/i/web/status/1234567892](https://x.com/i/web/status/1234567892)
+
+## AI models
+1. **GPT-4 model tips**
+   - [https://x.com/i/web/status/1234567893](https://x.com/i/web/status/1234567893)
+
+## AI resources
+1. **Top AI learning resources**
+   - [https://x.com/i/web/status/1234567894](https://x.com/i/web/status/1234567894)
+```
+
+---
+
+## FAQ
+
+**Q: How do I add or change categories?**
+- A: Set the `AI_CATEGORIES` environment variable (comma-separated) in your `.env` or GitHub secrets.
+
+**Q: How do I avoid irrelevant tweets?**
+- A: The pipeline uses keyword filtering and can be extended with spaCy or OpenAI LLM for better relevance.
+
+**Q: How do I get notified of workflow results?**
+- A: Set up email secrets (`EMAIL_TO`, `EMAIL_USERNAME`, `EMAIL_PASSWORD`) in your repo. The workflow will send you a notification on completion.
+
+**Q: Can I run this more than once a day?**
+- A: Due to Twitter API rate limits, it is recommended to run at most twice a day.
+
+**Q: How do I contribute?**
+- A: Fork the repo, create a feature branch, and submit a pull request. See the Contributing section below.
+
+**Q: What if I get a 429 error from the Twitter API?**
+- A: The crawler has retry logic with exponential backoff. If you see repeated 429 errors, reduce run frequency or apply for higher API access.
 
 ---
 
