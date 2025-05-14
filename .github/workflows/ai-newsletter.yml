@@ -1,0 +1,50 @@
+name: AI Newsletter Daily
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Runs daily at 8am UTC
+  workflow_dispatch:
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+    env:
+      X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPO: ${{ secrets.GITHUB_REPO }}
+      GITHUB_BRANCH: ${{ secrets.GITHUB_BRANCH }}
+      AI_CATEGORIES: ${{ secrets.AI_CATEGORIES }}
+      NEWSLETTER_OUTPUT_DIR: AI-newsletter
+      EMAIL_TO: ${{ secrets.EMAIL_TO }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run newsletter workflow
+        run: |
+          python main.py
+
+      - name: Send notification email
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "[AI Newsletter] Workflow ${{ job.status }} on $(date +'%Y-%m-%d')"
+          to: ${{ secrets.EMAIL_TO }}
+          from: ${{ secrets.EMAIL_USERNAME }}
+          body: |
+            The AI newsletter workflow has completed with status: ${{ job.status }}.
+            See the run details at ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} 
